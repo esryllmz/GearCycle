@@ -1,46 +1,47 @@
-# Environment and secrets
+# ---- Java / Maven ----
+target/
+*.class
+
+# ---- Node / Next.js ----
+node_modules/
+.next/
+out/
+dist/
+build/
+.turbo/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---- Environment and secrets ----
 .env
 .env.*
 !.env.example
-*.pem
-*.key
-*.p12
-*.jks
 
-# Java / Maven
-**/target/
-.mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
-
-# Node.js / Next.js
-**/node_modules/
-**/.next/
-**/out/
-**/coverage/
-npm-debug.log*
-yarn-debug.log*
-pnpm-debug.log*
-
-# IDE
+# ---- IDE ----
 .idea/
 *.iml
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+.settings/
+.project
+.classpath
 
-# Operating system
+# ---- OS ----
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Logs and runtime
+# ---- Logs and runtime ----
 *.log
 logs/
 .runlogs/
 tmp/
 temp/
 
-# Test and tooling
+# ---- Test and tooling ----
 .playwright/
 test-results/
 allure-results/

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.gearcycle</groupId>
+    <artifactId>gearcycle-parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>GearCycle Parent</name>
+    <description>
+        Parent project for GearCycle, a microservices platform for managing the
+        repair, recovery, refurbishment, resale preparation, and recycling
+        lifecycle of electronic devices. This POM defines shared build
+        conventions for future Java 21 / Spring Boot service modules. It
+        intentionally declares no modules and no service-specific dependencies
+        until those services are designed and approved.
+    </description>
+
+    <properties>
+        <!-- Language and build conventions -->
+        <java.version>21</java.version>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- Plugin versions (pinned for reproducibility) -->
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!--
+                    Compiler plugin pin only. No source/target configuration is
+                    applied at the parent level beyond the release property,
+                    since no module compiles Java code yet.
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <release>${maven.compiler.release}</release>
+                    </configuration>
+                </plugin>
+
+                <!--
+                    Enforcer plugin pin only. See the root README for why this
+                    is considered safe and minimal at this stage of the project.
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>${maven-enforcer-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <!--
+                Enforcer runs eagerly (not just declared in pluginManagement)
+                because its only job today is to fail the build fast if a
+                contributor's local Java or Maven version drifts from what the
+                project requires. It has two rules, no custom rule
+                implementations, and no dependency convergence checks yet
+                (there are no dependencies to converge). This is intentionally
+                the only plugin Day 02 binds to a build phase.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[21,22)</version>
+                                </requireJavaVersion>
+                                <requireMavenVersion>
+                                    <version>[3.9,)</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+  <!--
+    No Maven module entries are declared yet. Service modules
+    (device-service, repair-service, inventory-service,
+    notification-service, api-gateway) will be added one at a time, each in
+    the same commit that introduces that module's own pom.xml, per the
+    approved development roadmap.
+
+    No dependency management section is declared yet. Spring Boot BOM,
+    Testcontainers BOM, and other shared dependency versions will be
+    introduced when the first service module actually consumes them.
+-->
+
+</project>
