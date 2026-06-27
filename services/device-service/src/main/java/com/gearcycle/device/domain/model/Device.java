@@ -13,18 +13,27 @@ public final class Device {
     private final Instant receivedAt;
     private String notes;
 
-    private Device(DeviceId id, DeviceCategory category, Instant receivedAt) {
+    private Device(DeviceId id, DeviceCategory category, DeviceLifecycleStatus status,
+                   Instant receivedAt, String notes) {
         this.id = id;
         this.category = category;
-        this.status = DeviceLifecycleStatus.INTAKEN;
+        this.status = status;
         this.receivedAt = receivedAt;
+        this.notes = notes;
     }
 
     public static Device intake(DeviceCategory category) {
         if (category == null) {
             throw new InvalidDeviceStateException("Device category must not be null");
         }
-        return new Device(DeviceId.generate(), category, Instant.now());
+        return new Device(DeviceId.generate(), category, DeviceLifecycleStatus.INTAKEN,
+                Instant.now(), null);
+    }
+
+    public static Device reconstitute(DeviceId id, DeviceCategory category,
+                                      DeviceLifecycleStatus status, Instant receivedAt,
+                                      String notes) {
+        return new Device(id, category, status, receivedAt, notes);
     }
 
     public void transitionTo(DeviceLifecycleStatus newStatus) {
