@@ -21,6 +21,10 @@
         until those services are designed and approved.
     </description>
 
+    <modules>
+        <module>services/device-service</module>
+    </modules>
+
     <properties>
         <!-- Language and build conventions -->
         <java.version>21</java.version>
@@ -31,6 +35,7 @@
         <!-- Plugin versions (pinned for reproducibility) -->
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
+        <spring-boot.version>3.5.3</spring-boot.version>
     </properties>
 
     <build>
@@ -58,6 +63,12 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>${maven-enforcer-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -97,16 +108,16 @@
         </plugins>
     </build>
 
-  <!--
-    No Maven module entries are declared yet. Service modules
-    (device-service, repair-service, inventory-service,
-    notification-service, api-gateway) will be added one at a time, each in
-    the same commit that introduces that module's own pom.xml, per the
-    approved development roadmap.
-
-    No dependency management section is declared yet. Spring Boot BOM,
-    Testcontainers BOM, and other shared dependency versions will be
-    introduced when the first service module actually consumes them.
--->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>
